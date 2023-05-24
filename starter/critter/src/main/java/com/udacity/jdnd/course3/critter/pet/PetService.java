@@ -40,6 +40,15 @@ public class PetService {
         return ownerPetDTOList;
     }
 
+    public List<PetDTO> getAllPets() {
+        List<Pet> allPetsList = petRepository.findAll();
+        List<PetDTO> allPetDTOList = allPetsList.stream()
+                .map(pet -> convertPetToPetDTO(pet))
+                .collect(Collectors.toList());
+        return allPetDTOList;
+
+    }
+
     private PetDTO convertPetToPetDTO(Pet pet) {
         PetDTO petDTO = new PetDTO();
         BeanUtils.copyProperties(pet, petDTO);
