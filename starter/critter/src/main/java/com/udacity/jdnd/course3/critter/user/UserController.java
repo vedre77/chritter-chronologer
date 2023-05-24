@@ -1,7 +1,11 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.udacity.jdnd.course3.critter.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerDTO;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerService;
+import com.udacity.jdnd.course3.critter.user.employee.Employee;
+import com.udacity.jdnd.course3.critter.user.employee.EmployeeDTO;
+import com.udacity.jdnd.course3.critter.user.employee.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +26,15 @@ public class UserController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private EmployeeService employeeService;
+
     @PostMapping("/customer")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        return customerService.saveCustomer(customerDTO);
+        Customer savedCustomer = customerService.saveCustomer(customerDTO);
+        customerDTO.setId(savedCustomer.getId());
+        return customerDTO;
     }
 
     @GetMapping("/customer")
@@ -39,13 +48,17 @@ public class UserController {
     }
 
     @PostMapping("/employee")
+    @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDTO saveEmployee(@RequestBody EmployeeDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        Employee savedEmployee = employeeService.saveEmployee(employeeDTO);
+        employeeDTO.setId(savedEmployee.getId());
+        return employeeDTO;
     }
 
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+        return employeeService.getEmployeeById(employeeId);
+
     }
 
     @PutMapping("/employee/{employeeId}")
