@@ -1,5 +1,6 @@
-package com.udacity.jdnd.course3.critter.user;
+package com.udacity.jdnd.course3.critter.user.employee;
 
+import com.udacity.jdnd.course3.critter.user.BaseUser;
 import javax.persistence.*;
 
 @Entity
