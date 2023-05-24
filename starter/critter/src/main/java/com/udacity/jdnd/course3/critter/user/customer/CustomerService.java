@@ -1,12 +1,10 @@
 package com.udacity.jdnd.course3.critter.user.customer;
 
 import com.udacity.jdnd.course3.critter.user.BaseUser;
-import com.udacity.jdnd.course3.critter.user.BaseUserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,22 +12,20 @@ import java.util.stream.Collectors;
 public class CustomerService {
 
     @Autowired
-    private BaseUserRepository baseUserRepository;
+    private CustomerRepository customerRepository;
 
     @Transactional
-    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+    public Customer saveCustomer(CustomerDTO customerDTO) {
         Customer newCustomer = convertCustomerDTOToCustomer(customerDTO);
-        baseUserRepository.save(newCustomer);
-        return customerDTO;
+        return customerRepository.save(newCustomer);
     }
 
     public List<CustomerDTO> getAllCustomers() {
-        List<BaseUser> baseUsers = baseUserRepository.findAll();
-        return baseUsers.stream()
-                .filter(user -> user instanceof Customer)
-                .map(user -> (Customer) user)
-                .map(this::convertCustomerToCustomerDTO)
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDTO> customerDTOList = customers.stream()
+                .map(customer -> convertCustomerToCustomerDTO(customer))
                 .collect(Collectors.toList());
+        return customerDTOList;
     }
     private CustomerDTO convertCustomerToCustomerDTO(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
