@@ -1,7 +1,6 @@
 package com.udacity.jdnd.course3.critter.schedule;
 
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /**
