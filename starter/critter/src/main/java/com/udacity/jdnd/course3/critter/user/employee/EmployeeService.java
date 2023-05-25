@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.DayOfWeek;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EmployeeService {
@@ -25,6 +27,17 @@ public class EmployeeService {
             return convertEmployeeToEmployeeDTO(employee.get());
         } else {
             throw new EntityNotFoundException("Employee with id " + employeeId + " not found");
+        }
+    }
+
+    public void setEmployeeAvailability(Set<DayOfWeek> daysAvailable, long employeeId) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalEmployee.isPresent()) {
+            Employee employee = optionalEmployee.get();
+            employee.setDaysAvailable(daysAvailable);
+            employeeRepository.save(employee);
+        } else {
+            throw new EntityNotFoundException("The employee with id" + employeeId + "not found");
         }
     }
 
