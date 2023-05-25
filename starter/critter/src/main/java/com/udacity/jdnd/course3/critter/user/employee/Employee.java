@@ -1,6 +1,7 @@
 package com.udacity.jdnd.course3.critter.user.employee;
 
 import com.udacity.jdnd.course3.critter.user.BaseUser;
+import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.util.Set;
@@ -13,6 +14,10 @@ public class Employee extends BaseUser {
 
     @ElementCollection(targetClass = DayOfWeek.class)
     private Set<DayOfWeek> daysAvailable;
+
+    @ElementCollection(targetClass = EmployeeSkill.class)
+    @Enumerated(EnumType.STRING)
+    private Set<EmployeeSkill> skills;
 
     //@ManyToMany(mappedBy = "employees")
     //private List<Schedule> schedules;
@@ -27,11 +32,19 @@ public class Employee extends BaseUser {
         return daysAvailable;
     }
 
+    public Set<EmployeeSkill> getSkills() {
+        return skills;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
     public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
         this.daysAvailable = daysAvailable;
+    }
+
+    public void setSkills(Set<EmployeeSkill> skills) {
+        this.skills = skills;
     }
 }
