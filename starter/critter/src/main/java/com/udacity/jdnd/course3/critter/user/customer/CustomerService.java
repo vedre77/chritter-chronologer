@@ -6,10 +6,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,12 +35,24 @@ public class CustomerService {
                 .collect(Collectors.toList());
         return customerDTOList;
     }
+
+    public CustomerDTO findOwnerByPet(Long petId) {
+        Optional<Customer> optionalPetOwner = customerRepository.findByPetsId(petId);
+        if (optionalPetOwner.isPresent()) {
+            Customer retrievedPetOwner = optionalPetOwner.get();
+            return convertCustomerToCustomerDTO(retrievedPetOwner);
+        } else {
+            throw new EntityNotFoundException("Owner of pet with id " + petId + " not found");
+        }
+    }
     private CustomerDTO convertCustomerToCustomerDTO(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
         BeanUtils.copyProperties(customer, customerDTO);
+        List<Long> petIds = new ArrayList<>();
         for (Pet pet : customer.getPets()) {
-            customerDTO.setPetIds(pet.getId());
+            petIds.add(pet.getId());
         }
+        customerDTO.setPetIds(petIds);
         return customerDTO;
     }
 

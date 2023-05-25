@@ -6,6 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,8 +20,22 @@ public class PetService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Transactional
     public PetDTO savePet(PetDTO petDTO) {
-        return convertPetToPetDTO(petRepository.save(convertPetDTOToPet(petDTO)));
+        Pet pet = convertPetDTOToPet(petDTO);
+        petRepository.save(pet);
+        Long petOwnerId = pet.getOwner().getId();
+        Optional<Customer> optionalCustomer = customerRepository.findById(petOwnerId);
+        if (optionalCustomer.isPresent()) {
+            Customer customer = optionalCustomer.get();
+            // Add the pet to the customer's list of pets
+            customer.getPets().add(pet);
+            // Save the updated customer
+            customerRepository.save(customer);
+        } else {
+            throw new EntityNotFoundException("Customer with id " + petOwnerId + " not found");
+        }
+        return convertPetToPetDTO(pet);
     }
 
     public PetDTO getPet(Long petId) {

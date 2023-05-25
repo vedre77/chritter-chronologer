@@ -50,8 +50,8 @@ public class CustomerDTO {
         return petIds;
     }
 
-    public void setPetIds(Long petId) {
-        this.petIds.add(petId);
+    public void setPetIds(List<Long> petIds) {
+        this.petIds = petIds;
     }
 
     @Override
