@@ -2,7 +2,6 @@ package com.udacity.jdnd.course3.critter.pet;
 
 import com.udacity.jdnd.course3.critter.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerRepository;
-import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +60,7 @@ public class PetService {
                     .collect(Collectors.toList());
             return ownerPetDTOList;
         } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner with supplied ID not fund.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner with supplied ID not found.");
         }
     }
 
