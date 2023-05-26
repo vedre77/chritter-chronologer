@@ -43,6 +43,10 @@ public class Customer extends BaseUser {
         pets.add(pet);
     }
 
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
