@@ -1,6 +1,5 @@
 package com.udacity.jdnd.course3.critter.user;
 
-import com.udacity.jdnd.course3.critter.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerDTO;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerService;
 import com.udacity.jdnd.course3.critter.user.employee.Employee;
@@ -53,7 +52,7 @@ public class UserController {
         return employeeDTO;
     }
 
-    @PostMapping("/employee/{employeeId}")
+    @GetMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
         return employeeService.getEmployeeById(employeeId);
 
