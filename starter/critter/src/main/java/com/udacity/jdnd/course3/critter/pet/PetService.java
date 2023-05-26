@@ -2,9 +2,13 @@ package com.udacity.jdnd.course3.critter.pet;
 
 import com.udacity.jdnd.course3.critter.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerRepository;
+import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -48,11 +52,17 @@ public class PetService {
     }
 
     public List<PetDTO> getPetsByOwner(Long ownerId) {
-        List<Pet> ownerPetList = petRepository.findByOwnerId(ownerId);
-        List<PetDTO> ownerPetDTOList = ownerPetList.stream()
-                .map(pet -> convertPetToPetDTO(pet))
-                .collect(Collectors.toList());
-        return ownerPetDTOList;
+        // first check the id of the owner!
+        Optional<Customer> owner = customerRepository.findById(ownerId);
+        if (owner.isPresent()) {
+            List<Pet> ownerPetList = petRepository.findByOwnerId(ownerId);
+            List<PetDTO> ownerPetDTOList = ownerPetList.stream()
+                    .map(pet -> convertPetToPetDTO(pet))
+                    .collect(Collectors.toList());
+            return ownerPetDTOList;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner with supplied ID not fund.");
+        }
     }
 
     public List<PetDTO> getAllPets() {
