@@ -23,9 +23,10 @@ public class CustomerService {
     private PetRepository petRepository;
 
     @Transactional
-    public Customer saveCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         Customer newCustomer = convertCustomerDTOToCustomer(customerDTO);
-        return customerRepository.save(newCustomer);
+        Customer savedCustomer = customerRepository.save(newCustomer);
+        return convertCustomerToCustomerDTO(savedCustomer);
     }
 
     public List<CustomerDTO> getAllCustomers() {
@@ -60,7 +61,6 @@ public class CustomerService {
         Customer customer = new Customer();
         customer.setName(customerDTO.getName());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());
-
         if (!CollectionUtils.isEmpty(customerDTO.getPetIds())) {
             List<Pet> pets = customerDTO.getPetIds().stream()
                     .map(petRepository::findById)
