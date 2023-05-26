@@ -25,7 +25,7 @@ public class Pet {
 
     private String notes;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "pets")
     private List<Schedule> schedules;
 
     public List<Schedule> getSchedules() {
