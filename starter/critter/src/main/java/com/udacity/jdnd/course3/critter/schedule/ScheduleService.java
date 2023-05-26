@@ -2,12 +2,16 @@ package com.udacity.jdnd.course3.critter.schedule;
 
 import com.udacity.jdnd.course3.critter.pet.Pet;
 import com.udacity.jdnd.course3.critter.pet.PetRepository;
+import com.udacity.jdnd.course3.critter.user.customer.Customer;
 import com.udacity.jdnd.course3.critter.user.customer.CustomerRepository;
 import com.udacity.jdnd.course3.critter.user.employee.Employee;
 import com.udacity.jdnd.course3.critter.user.employee.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,30 +42,45 @@ public class ScheduleService {
     }
 
     public List<ScheduleDTO> findAllScheduleForPet(long petId) {
-        List<Schedule> petScheduleList = scheduleRepository.findScheduleByPetId(petId);
-        List<ScheduleDTO> retrievedPetScheduleDTOs = petScheduleList.stream()
-                .map(schedule -> convertScheduleToScheduleDTO(schedule))
-                .collect(Collectors.toList());
-        return retrievedPetScheduleDTOs;
+        // first check the id of the pet!
+        Optional<Pet> optionalPet = petRepository.findById(petId);
+        if (optionalPet.isPresent()) {
+            List<Schedule> petScheduleList = scheduleRepository.findScheduleByPetId(petId);
+            List<ScheduleDTO> retrievedPetScheduleDTOs = petScheduleList.stream()
+                    .map(schedule -> convertScheduleToScheduleDTO(schedule))
+                    .collect(Collectors.toList());
+            return retrievedPetScheduleDTOs;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pet with supplied ID not found.");
+        }
     }
 
     public List<ScheduleDTO> findAllScheduleForEmployee(long employeeId) {
-        List<Schedule> employeeScheduleList = scheduleRepository.findScheduleByEmployeeId(employeeId);
-        List<ScheduleDTO> retrievedEmployeeScheduleDTOs = employeeScheduleList.stream()
-                .map(schedule -> convertScheduleToScheduleDTO(schedule))
-                .collect(Collectors.toList());
-        return retrievedEmployeeScheduleDTOs;
+        // first check the id of the employee!
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if (optionalEmployee.isPresent()) {
+            List<Schedule> employeeScheduleList = scheduleRepository.findScheduleByEmployeeId(employeeId);
+            List<ScheduleDTO> retrievedEmployeeScheduleDTOs = employeeScheduleList.stream()
+                    .map(schedule -> convertScheduleToScheduleDTO(schedule))
+                    .collect(Collectors.toList());
+            return retrievedEmployeeScheduleDTOs;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee with supplied ID not found.");
+        }
     }
 
     public List<ScheduleDTO> findAllScheduleForCustomer(long customerId) {
-        // debugging: first check all the repo:
-        List<Schedule> allSchedules = scheduleRepository.findAll();
-
-        List<Schedule> customerScheduleList = scheduleRepository.findScheduleByCustomerId(customerId);
-        List<ScheduleDTO> retrievedCustomerScheduleList = customerScheduleList.stream()
-                .map(schedule -> convertScheduleToScheduleDTO(schedule))
-                .collect(Collectors.toList());
-        return retrievedCustomerScheduleList;
+        // first check the id of the customer!
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+        if (optionalCustomer.isPresent()) {
+            List<Schedule> customerScheduleList = scheduleRepository.findScheduleByCustomerId(customerId);
+            List<ScheduleDTO> retrievedCustomerScheduleList = customerScheduleList.stream()
+                    .map(schedule -> convertScheduleToScheduleDTO(schedule))
+                    .collect(Collectors.toList());
+            return retrievedCustomerScheduleList;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer with supplied ID not found.");
+        }
     }
 
     private Schedule convertScheduleDTOToSchedule(ScheduleDTO scheduleDTO) {
