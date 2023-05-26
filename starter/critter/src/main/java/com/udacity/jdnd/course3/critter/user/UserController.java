@@ -32,9 +32,7 @@ public class UserController {
     @PostMapping("/customer")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
-        Customer savedCustomer = customerService.saveCustomer(customerDTO);
-        customerDTO.setId(savedCustomer.getId());
-        return customerDTO;
+        return customerService.saveCustomer(customerDTO);
     }
 
     @GetMapping("/customer")
