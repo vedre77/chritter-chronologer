@@ -21,7 +21,7 @@ public class Employee extends BaseUser {
     @Enumerated(EnumType.STRING)
     private Set<EmployeeSkill> skills;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "employees")
     private List<Schedule> schedules;
 
     public String getTitle() {
@@ -46,5 +46,13 @@ public class Employee extends BaseUser {
 
     public void setSkills(Set<EmployeeSkill> skills) {
         this.skills = skills;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 }
