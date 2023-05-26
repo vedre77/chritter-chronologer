@@ -1,8 +1,10 @@
 package com.udacity.jdnd.course3.critter.pet;
 
+import com.udacity.jdnd.course3.critter.schedule.Schedule;
 import com.udacity.jdnd.course3.critter.user.customer.Customer;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Pet {
@@ -22,6 +24,17 @@ public class Pet {
     private LocalDate birthDate;
 
     private String notes;
+
+    @ManyToMany
+    private List<Schedule> schedules;
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
 
     public Long getId() {
         return id;
