@@ -1,3 +1,13 @@
+# Critter Chronologer Project finalized:
+
+* application now connects to the external MySQL database and the internal H2 database for unit tests
+* necessary entities are created and correct relationships between them are established
+* appropriate data access components (DAO / Repository) created
+* appropriate data types for entities chosen and transaction boundaries set
+* conversion methods established to transform entity data into DTOs (and vice versa), domain logic separated from the persistence layer
+* DAO or Repository objects focus on their own entities
+* all functional tests and Postman test collection pass
+
 # Critter Chronologer Project Starter
 
 Critter Chronologer a Software as a Service application that provides a scheduling interface for a small business that takes care of animals. This Spring Boot project will allow users to create pets, owners, and employees, and then schedule events for employees to provide services for pets.
